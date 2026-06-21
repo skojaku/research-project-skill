@@ -1,21 +1,28 @@
 # Research Project Skill
 
-A skill that manages a research project's full lifecycle — from kicking off a new experiment, through running it and recording findings, to marking the results ready for the paper.
+This is a AI skill that manages computational research project. The key principles, which are an adaptation of [Zen of Python](https://peps.python.org/pep-0020/) by Tim Peters:
 
-I run a lot of small, self-contained experiments. Each one deserves its own home, a clear statement of the question, and a way to track where it stands. Left to myself (or an AI assistant), the setup drifts: folders get named inconsistently, the "what was I even testing?" note never gets written, and half-finished threads vanish. This skill captures the routine I want followed every time, so the boring-but-important scaffolding happens automatically and I can stay focused on the science.
+- Beautiful is better than ugly.
+- Explicit is better than implicit.
+- Simple is better than complex.
+- Complex is better than complicated.
+- Flat is better than nested.
+- Readability counts.
+- Special cases aren't special enough to break the rules.
+- Although practicality beats purity.
+- In the face of ambiguity, refuse the temptation to guess.
+- If the idea is hard to explain, it's a bad idea.
+- If the idea is easy to explain, it may be a good idea.
 
-## What it does
+The skill has the following rules for different lifestage of a research project. 
+- **Fresh start**: When fresh start a project, [Downloads my project template](https://github.com/skojaku/project-template/) to get started.
 
-Every experiment lives in its own dated folder under `exps/`, fronted by a `NOTE.md` that explains the question in plain language, and tracked by a GitHub issue whose label records the stage. The skill runs the whole arc:
+- **Exploration**: When exploring a new idea, create a folder under `exps/<yyyy-mm-dd>-<experiment name>` as a workspace. In the workspace,
+  - [Snakemake](https://github.com/snakemake/snakemake) will be used to organize the reproducible pipeline.
+  - It takes Lab note as it goes in NOTE.md. It also reports the findings and learning in Github Issue.
 
-1. **Start** — create `exps/YYYY-MM-DD-short-desc/`, load my [Snakemake conventions](https://github.com/skojaku/snakemake-skill), write a `NOTE.md` (the question, stated so a reader understands it without opening any code), and open a GitHub tracking issue labelled `experiment-needed`.
-2. **Run and record** — keep the `NOTE.md` current as the work progresses, adding a findings section with the answer.
-3. **Advance the stage** — move the issue's label as the work moves: `experiment-needed` → `ready-to-paper` → `documentation`, and close it when the thread is done.
+- **Master workflow**: When the exploration pipeline generates results, hammered on well, and we want to include them in the paper, we include them into the reproducible master workflow under the project folder. This master workflow is the final deliverable for reproducing the results.
 
-It also encodes two habits I care about:
-
-- **Keep the design simple.** Favour the simplest experiment that can answer the question. If you can't explain it in a couple of plain sentences, it's too complicated — cut it down before running anything.
-- **Talk about results in plain language.** Lead with the answer, no invented acronyms, no code-speak (say what a thing *is*, not its variable name), and explain findings so they stand alone for someone who never opened the files.
 
 ## Installation
 
