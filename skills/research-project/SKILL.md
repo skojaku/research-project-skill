@@ -76,6 +76,35 @@ kebab-case handle for the question (e.g. `chunk-tda`). Inside the workspace:
   folder path) and keep it updated as the work teaches you things. Label it
   `experiment-needed` while it still needs computation.
 
+## Organizing files
+
+Each exploration folder is a self-contained mini-project — it has its own pipeline,
+its own data, its own notes, and nothing reaches across into a sibling. That
+isolation is what lets you reproduce, delete, or revive an experiment without
+disturbing the rest. The layout mirrors the project's Snakemake conventions:
+
+```
+exps/<yyyy-mm-dd>-<experiment name>/
+├── NOTE.md            # lab notebook (from assets/NOTE.template.md)
+├── Snakefile          # config, globals, params, includes
+├── workflow/
+│   ├── rules/         # one .smk per pipeline stage
+│   └── <category>/    # scripts grouped by purpose: stats/, plot/, fitting/
+└── data/              # outputs, tiered: preprocessed/, derived/, plot_data/
+```
+
+Two rules carry most of the weight, so make them explicit:
+
+- **Code and data live apart.** Everything you write goes under `workflow/`;
+  everything the pipeline produces goes under `data/`. Never commit large data —
+  the pipeline regenerates it. The point is that the code is the artifact and the
+  data is disposable.
+- **Defer the pipeline details to the `snakemake` skill.** It owns the naming and
+  wiring (UPPER_CASE `Path` constants, list-valued params via `to_paramspace()` /
+  `.wildcard_pattern`, dual-mode scripts that run inside *and* outside Snakemake,
+  one aggregation rule per stage). Load it before writing rules rather than
+  reinventing those conventions here.
+
 ## Master workflow
 
 When an exploration's pipeline has produced results, been hammered on until they
@@ -86,6 +115,12 @@ experiment here means it has graduated from scratch work to a result you stand
 behind; mark its issue `ready-to-paper` (create the label once if missing:
 `gh label create ready-to-paper --description "Results ready to present in the paper" --color 0e8a16`).
 Use `documentation` for issues whose task is writeups rather than experiments.
+
+The master workflow uses the same Snakemake layout as an exploration folder, but
+lives at the project root (`Snakefile`, `workflow/`, `data/`) rather than under
+`exps/`. Promoting means lifting the validated rules and scripts out of the
+exploration folder into that root pipeline and wiring them into `rule all`, so the
+whole paper reproduces from one `snakemake` invocation.
 
 ## Talking about results
 
