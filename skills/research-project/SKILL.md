@@ -27,13 +27,13 @@ they apply to experiment design and everything you build:
 > explain it may be good.
 
 Sharpest tests: if you can't explain an experiment in a couple of plain sentences,
-it's too complicated — cut it down before running. In the face of ambiguity, ask;
-don't guess. A project moves through three stages — match the stage to the user's intent.
+it's too complicated; and in the face of ambiguity, ask — don't guess. A project
+moves through three stages — match the stage to the user's intent.
 
 ## Fresh start
 
-Starting from scratch — clone the template, strip its git history if it's becoming
-a new repo, adapt README and structure:
+Starting from scratch — clone the template, strip its git history if it's a new
+repo, adapt README and structure:
 
 ```bash
 git clone https://github.com/skojaku/project-template/ <project-dir>
@@ -97,7 +97,6 @@ use `documentation` for issues whose task is writeups, not experiments.
 
 ## Talking about results
 
-The user reads conclusions, not code. When reporting a finding: **be brief** (lead
-with the answer); **no invented acronyms**; **no code-speak** (say what a thing
-*is*, not its variable/function/column name); **standalone** (make sense to someone
-who never opened the files).
+The user reads conclusions, not code. Reporting a finding: **be brief** (lead with
+the answer); **no invented acronyms**; **no code-speak** (say what a thing *is*, not
+its variable/function name); **standalone** (sensible to someone who never opened the files).
