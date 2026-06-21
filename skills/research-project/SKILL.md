@@ -16,8 +16,7 @@ description: >-
 
 # Research project lifecycle
 
-Guiding principles, adapted from the [Zen of Python](https://peps.python.org/pep-0020/) —
-they apply to experiment design and everything you build:
+Guiding principles, adapted from the [Zen of Python](https://peps.python.org/pep-0020/), apply to experiment design and everything you build:
 
 > Beautiful > ugly. Explicit > implicit. Simple > complex. Complex > complicated.
 > Flat > nested. Readability counts. Special cases aren't special enough to break
