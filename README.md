@@ -1,6 +1,6 @@
 # Research Project Skill
 
-This is a AI skill that manages computational research project. The key principles, which are an adaptation of [Zen of Python](https://peps.python.org/pep-0020/) by Tim Peters:
+This is an AI skill that manages computational research project. The key principles, which are an adaptation of [Zen of Python](https://peps.python.org/pep-0020/) by Tim Peters:
 
 - Beautiful is better than ugly.
 - Explicit is better than implicit.
