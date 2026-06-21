@@ -17,71 +17,33 @@ description: >-
 
 # Research project lifecycle
 
-This skill manages a computational research project. Its guiding principles are an
-adaptation of the [Zen of Python](https://peps.python.org/pep-0020/) — they apply
-to experiment design and to everything you build here:
+Guiding principles, adapted from the [Zen of Python](https://peps.python.org/pep-0020/) —
+they apply to experiment design and everything you build:
 
-> - Beautiful is better than ugly.
-> - Explicit is better than implicit.
-> - Simple is better than complex.
-> - Complex is better than complicated.
-> - Flat is better than nested.
-> - Readability counts.
-> - Special cases aren't special enough to break the rules.
-> - Although practicality beats purity.
-> - In the face of ambiguity, refuse the temptation to guess.
-> - If the idea is hard to explain, it's a bad idea.
-> - If the idea is easy to explain, it may be a good idea.
+> Beautiful > ugly. Explicit > implicit. Simple > complex. Complex > complicated.
+> Flat > nested. Readability counts. Special cases aren't special enough to break
+> the rules, although practicality beats purity. In the face of ambiguity, refuse
+> the temptation to guess. If an idea is hard to explain it's bad; if easy to
+> explain it may be good.
 
-The last two are the sharpest test: if you can't explain an experiment to the
-user in a couple of plain sentences, it's too complicated — cut it down before
-running anything. And in the face of ambiguity, don't guess — ask.
-
-A project moves through three stages. Match the stage to what the user is doing.
+Sharpest tests: if you can't explain an experiment in a couple of plain sentences,
+it's too complicated — cut it down before running. In the face of ambiguity, ask;
+don't guess. A project moves through three stages — match the stage to the user's intent.
 
 ## Fresh start
 
-When starting a project from scratch, download the project template to get going:
+Starting from scratch — clone the template, strip its git history if it's becoming
+a new repo, adapt README and structure:
 
 ```bash
 git clone https://github.com/skojaku/project-template/ <project-dir>
 ```
 
-Then strip the template's git history if it's becoming a new repo, and adapt the
-README and structure to the project at hand.
-
 ## Exploration
 
-When exploring a new idea, create a workspace folder named by date and topic:
-
-```
-exps/<yyyy-mm-dd>-<experiment name>/
-```
-
-Use `date +%F` for the date — don't guess it. `<experiment name>` is a short
-kebab-case handle for the question (e.g. `chunk-tda`). Inside the workspace:
-
-- **Snakemake** organizes the reproducible pipeline. Invoke the `snakemake` skill
-  before writing any rules so the pipeline matches house conventions.
-- **NOTE.md** is the lab notebook — write it as you go. It is the front page of
-  the experiment: a reader should understand the question and what you found
-  without opening any code. Start it from `assets/NOTE.template.md`. The template
-  is a running log: a title with the one-line takeaway, then one dated entry per
-  experiment within this exploration, newest at the bottom, separated by `---`.
-  Each entry records what you tried, the findings, the learning, and any gotcha.
-  One exploration folder holds many such entries as the idea develops — append a
-  new dated block each time you run something, don't overwrite the last.
-- **GitHub issue** tracks the experiment and is where you report findings and
-  learnings. Open one at kickoff (title = the experiment, body = the question +
-  folder path) and keep it updated as the work teaches you things. Label it
-  `experiment-needed` while it still needs computation.
-
-## Organizing files
-
-Each exploration folder is a self-contained mini-project — it has its own pipeline,
-its own data, its own notes, and nothing reaches across into a sibling. That
-isolation is what lets you reproduce, delete, or revive an experiment without
-disturbing the rest. The layout mirrors the project's Snakemake conventions:
+Exploring a new idea — create a self-contained workspace named by date and topic.
+Use `date +%F`, don't guess it; `<experiment name>` is a short kebab handle (e.g.
+`chunk-tda`). Layout mirrors the project's Snakemake conventions:
 
 ```
 exps/<yyyy-mm-dd>-<experiment name>/
@@ -89,65 +51,53 @@ exps/<yyyy-mm-dd>-<experiment name>/
 ├── Snakefile          # config, globals, params, includes
 ├── workflow/
 │   ├── rules/         # one .smk per pipeline stage
-│   └── <category>/    # scripts grouped by purpose: stats/, plot/, fitting/
+│   └── <category>/    # scripts by purpose: stats/, plot/, fitting/
 └── data/              # outputs, tiered: preprocessed/, derived/, plot_data/
 ```
 
-Two rules carry most of the weight, so make them explicit:
-
-- **Code and data live apart.** Everything you write goes under `workflow/`;
-  everything the pipeline produces goes under `data/`. Never commit large data —
-  the pipeline regenerates it. The point is that the code is the artifact and the
-  data is disposable.
-- **Defer the pipeline details to the `snakemake` skill.** It owns the naming and
-  wiring (UPPER_CASE `Path` constants, list-valued params via `to_paramspace()` /
-  `.wildcard_pattern`, dual-mode scripts that run inside *and* outside Snakemake,
-  one aggregation rule per stage). Load it before writing rules rather than
-  reinventing those conventions here.
+- **Snakemake** organizes the reproducible pipeline. Invoke the `snakemake` skill
+  before writing rules — it owns the naming/wiring (UPPER_CASE `Path` constants,
+  list-valued params via `to_paramspace()`/`.wildcard_pattern`, dual-mode scripts,
+  one aggregation rule per stage). Don't reinvent those here.
+- **Code and data live apart:** what you write goes under `workflow/`, what the
+  pipeline produces under `data/`. Never commit large data — it regenerates.
+- **NOTE.md** is the lab notebook, written as you go — the front page a reader
+  understands without opening code. Start from `assets/NOTE.template.md`: a running
+  log of dated entries (newest at the bottom, separated by `---`), each recording
+  what you tried, the findings, the learning, and any gotcha. Append a new dated
+  block per run; don't overwrite the last.
+- **GitHub issue** tracks the experiment and reports findings/learnings. Open one
+  at kickoff (title = experiment, body = question + folder path), keep it updated,
+  label it `experiment-needed` while it still needs computation.
 
 ## Code preferences
 
-- **Python** is the default language.
-- **Environments:** `uv` for Python dependencies, `mamba` for environments and
-  system-level packages (conda-forge). Reach for `mamba` when something needs a
-  non-Python toolchain, `uv` for everything pip-shaped.
-- **Keep scripts short — under ~200 lines where you can.** A script that outgrows
-  that is usually doing too much; split it or lift the shared logic out. Short
-  scripts read top-to-bottom in one sitting, which is the whole point.
-- **`libs/` holds reusable code.** Anything imported across more than one
-  experiment or script — shared loaders, metrics, model wrappers — lives in a
-  project-root `libs/` and is imported, not copy-pasted. Pipeline-step scripts
-  stay in their experiment's `workflow/`; only the genuinely reusable parts
-  graduate to `libs/`.
-- **Secrets in `.env`.** API keys and tokens go in a gitignored `.env`, never
-  hardcoded in scripts. Load them from the environment.
-- **Record the machine in `.env` too.** Keep the CPU, GPU, and memory of the box
-  the work ran on in `.env` for reference, so a result can be read against the
-  hardware that produced it (timings and batch sizes only make sense with the
-  spec in hand).
+- **Python** by default.
+- **Environments:** `uv` for pip-shaped Python deps, `mamba` for environments and
+  system-level / non-Python toolchains (conda-forge).
+- **Scripts under ~200 lines** where you can — past that it's doing too much; split
+  it or lift shared logic out.
+- **`libs/`** at the project root holds reusable code (loaders, metrics, model
+  wrappers) imported across experiments — imported, not copy-pasted. One-off
+  pipeline steps stay in their experiment's `workflow/`.
+- **`.env`** (gitignored) holds API keys/tokens — never hardcode them — and the
+  machine's CPU/GPU/memory for reference, so results read against the hardware.
 
 ## Master workflow
 
-When an exploration's pipeline has produced results, been hammered on until they
-hold up, and you want them in the paper, promote them into the **reproducible
-master workflow** under the project folder. This master workflow is the final
-deliverable — the thing that reproduces the paper's results end to end. Moving an
-experiment here means it has graduated from scratch work to a result you stand
-behind; mark its issue `ready-to-paper` (create the label once if missing:
-`gh label create ready-to-paper --description "Results ready to present in the paper" --color 0e8a16`).
-Use `documentation` for issues whose task is writeups rather than experiments.
-
-The master workflow uses the same Snakemake layout as an exploration folder, but
-lives at the project root (`Snakefile`, `workflow/`, `data/`) rather than under
-`exps/`. Promoting means lifting the validated rules and scripts out of the
-exploration folder into that root pipeline and wiring them into `rule all`, so the
-whole paper reproduces from one `snakemake` invocation.
+When an exploration's results hold up and belong in the paper, promote them into
+the **reproducible master workflow** — the final deliverable that reproduces the
+paper end to end. It uses the same Snakemake layout but lives at the project root
+(`Snakefile`, `workflow/`, `data/`), not under `exps/`. Promoting = lift the
+validated rules and scripts out of the exploration folder into that root pipeline
+and wire them into `rule all`, so the whole paper reproduces from one `snakemake`
+run. Mark the issue `ready-to-paper` (create the label once if missing:
+`gh label create ready-to-paper --description "Results ready to present in the paper" --color 0e8a16`);
+use `documentation` for issues whose task is writeups, not experiments.
 
 ## Talking about results
 
-The user reads conclusions, not code. When reporting a finding:
-
-- **Brief.** Lead with the answer; a few sentences beat a wall of text.
-- **No invented acronyms.** Use plain words, not shorthand the user must decode.
-- **No code-speak.** Say what a thing *is*, never its variable/function/column name.
-- **Standalone.** Explain so it makes sense to someone who never opened the files.
+The user reads conclusions, not code. When reporting a finding: **be brief** (lead
+with the answer); **no invented acronyms**; **no code-speak** (say what a thing
+*is*, not its variable/function/column name); **standalone** (make sense to someone
+who never opened the files).
