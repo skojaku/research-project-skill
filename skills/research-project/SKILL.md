@@ -1,77 +1,94 @@
 ---
 name: research-project
 description: >-
-  Manage a research project's full lifecycle in this repo — from kicking off a
-  new experiment, through running it and recording findings, to marking results
-  ready for the paper. Use this whenever the user starts a new experiment, study,
-  or investigation ("let's test whether...", "new idea to look at...", "spin up a
-  study on..."), AND whenever they move an existing experiment to its next stage:
-  results are in, it's ready to write up, or it needs documentation. It owns the
-  experiment folder under exps/, the NOTE.md writeup, and the GitHub tracking
-  issue + its stage label. Trigger it even if the user doesn't say "experiment"
-  but is clearly starting or advancing a piece of research. Do NOT trigger for
-  narrow edits inside an already-scaffolded experiment — a Snakemake rule, a
-  NOTE.md typo, a script tweak, a conda env, paper text, or a gh lookup.
+  Manage a computational research project across its whole lifecycle in this repo
+  — starting a fresh project, exploring new ideas, and promoting validated results
+  into the reproducible master workflow. Use this whenever the user starts a new
+  project, kicks off a new experiment / study / investigation ("let's test
+  whether...", "new idea to look at...", "spin up a study on..."), records what an
+  experiment found, or wants results moved into the paper's master workflow. It
+  owns the project template, each experiment's dated folder under exps/, its
+  NOTE.md lab notes, its GitHub tracking issue, and the master workflow. Trigger
+  it even if the user doesn't say "experiment" but is clearly starting or
+  advancing a piece of research. Do NOT trigger for narrow edits inside an
+  already-scaffolded experiment — a Snakemake rule, a NOTE.md typo, a script
+  tweak, a conda env, paper text, or a gh lookup.
 ---
 
 # Research project lifecycle
 
-Every experiment lives in its own dated folder under `exps/`, fronted by a
-`NOTE.md` and tracked by a GitHub issue. This skill runs the whole arc so each
-thread stays findable and the user has one place to follow it. Match the house
-style of existing siblings (e.g. `exps/2026-06-06-pwc-method-similarity/`).
+This skill manages a computational research project. Its guiding principles are an
+adaptation of the [Zen of Python](https://peps.python.org/pep-0020/) — they apply
+to experiment design and to everything you build here:
 
-## Stage 1 — Start
+> - Beautiful is better than ugly.
+> - Explicit is better than implicit.
+> - Simple is better than complex.
+> - Complex is better than complicated.
+> - Flat is better than nested.
+> - Readability counts.
+> - Special cases aren't special enough to break the rules.
+> - Although practicality beats purity.
+> - In the face of ambiguity, refuse the temptation to guess.
+> - If the idea is hard to explain, it's a bad idea.
+> - If the idea is easy to explain, it may be a good idea.
 
-1. **Folder:** `exps/$(date +%F)-short-desc/`, where `short-desc` is a 2–4 word
-   kebab handle (e.g. `chunk-tda`). Use `date +%F` — don't guess the date.
-2. **Conventions:** invoke the `snakemake` skill before writing any pipeline, so
-   the new experiment looks like its siblings.
-3. **NOTE.md:** the front page — a reader understands the point without opening
-   code. Title line + one-line takeaway, then `## Question` (hypothesis stated
-   plainly: what confirms it, what refutes it), then `## Method` (fill in as the
-   design takes shape).
-4. **Issue:** auto-create it (user opted in — don't ask). Title = experiment;
-   body = the question + folder path. Label `experiment-needed`. Report the
-   number back. `gh issue create --title "..." --label experiment-needed --body "..."`
+The last two are the sharpest test: if you can't explain an experiment to the
+user in a couple of plain sentences, it's too complicated — cut it down before
+running anything. And in the face of ambiguity, don't guess — ask.
 
-## Stage 2 — Run and record
+A project moves through three stages. Match the stage to what the user is doing.
 
-As the experiment progresses, keep `NOTE.md` current: fill `## Method`, add a
-`## Findings` section with the answer. The note grows with the work; it should
-always read as the standalone story of the experiment.
+## Fresh start
 
-## Stage 3 — Advance the label
+When starting a project from scratch, download the project template to get going:
 
-The issue's label tracks the stage. Move it when the work moves (one label):
+```bash
+git clone https://github.com/skojaku/project-template/ <project-dir>
+```
 
-- `experiment-needed` — needs running/re-running (computation, not prose).
-- `ready-to-paper` — results exist, ready to present in the paper. Create the
-  label once if missing: `gh label create ready-to-paper --description "Results ready to present in the paper" --color 0e8a16`
-- `documentation` — the task is writeups/notes/READMEs, not experiments.
+Then strip the template's git history if it's becoming a new repo, and adapt the
+README and structure to the project at hand.
 
-Swap labels with `gh issue edit <n> --remove-label <old> --add-label <new>`.
-Close the issue when the thread is done.
+## Exploration
 
-## Designing the experiment — keep it simple
+When exploring a new idea, create a workspace folder named by date and topic:
 
-Favor the simplest design that answers the question. Working principles:
+```
+exps/<yyyy-mm-dd>-<experiment name>/
+```
 
-> Beautiful > ugly. Explicit > implicit. Simple > complex. Complex > complicated.
-> Flat > nested. Readability counts. If the idea is hard to explain, it's a bad
-> idea; if it's easy to explain, it may be a good one.
+Use `date +%F` for the date — don't guess it. `<experiment name>` is a short
+kebab-case handle for the question (e.g. `chunk-tda`). Inside the workspace:
 
-If you can't explain the experiment to the user in a couple of plain sentences,
-it's too complicated — cut it down before running anything.
+- **Snakemake** organizes the reproducible pipeline. Invoke the `snakemake` skill
+  before writing any rules so the pipeline matches house conventions.
+- **NOTE.md** is the lab notebook — write it as you go. It is the front page of
+  the experiment: a reader should understand the question and what you found
+  without opening any code. Title line + one-line takeaway, then the question
+  stated plainly (what would confirm it, what would refute it), then method and
+  findings as they take shape.
+- **GitHub issue** tracks the experiment and is where you report findings and
+  learnings. Open one at kickoff (title = the experiment, body = the question +
+  folder path) and keep it updated as the work teaches you things. Label it
+  `experiment-needed` while it still needs computation.
+
+## Master workflow
+
+When an exploration's pipeline has produced results, been hammered on until they
+hold up, and you want them in the paper, promote them into the **reproducible
+master workflow** under the project folder. This master workflow is the final
+deliverable — the thing that reproduces the paper's results end to end. Moving an
+experiment here means it has graduated from scratch work to a result you stand
+behind; mark its issue `ready-to-paper` (create the label once if missing:
+`gh label create ready-to-paper --description "Results ready to present in the paper" --color 0e8a16`).
+Use `documentation` for issues whose task is writeups rather than experiments.
 
 ## Talking about results
 
 The user reads conclusions, not code. When reporting a finding:
 
 - **Brief.** Lead with the answer; a few sentences beat a wall of text.
-- **No invented acronyms.** Use plain words, not shorthand they must decode.
+- **No invented acronyms.** Use plain words, not shorthand the user must decode.
 - **No code-speak.** Say what a thing *is*, never its variable/function/column name.
 - **Standalone.** Explain so it makes sense to someone who never opened the files.
-
-Test: would it make sense read aloud to someone with the research context but who
-hasn't seen your code? If not, rewrite it.

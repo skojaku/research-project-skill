@@ -14,7 +14,8 @@ This is a AI skill that manages computational research project. The key principl
 - If the idea is hard to explain, it's a bad idea.
 - If the idea is easy to explain, it may be a good idea.
 
-The skill has the following rules for different lifestage of a research project. 
+The skill has the following rules for different lifestage of a research project.
+
 - **Fresh start**: When fresh start a project, [Downloads my project template](https://github.com/skojaku/project-template/) to get started.
 
 - **Exploration**: When exploring a new idea, create a folder under `exps/<yyyy-mm-dd>-<experiment name>` as a workspace. In the workspace,
@@ -22,7 +23,6 @@ The skill has the following rules for different lifestage of a research project.
   - It takes Lab note as it goes in NOTE.md. It also reports the findings and learning in Github Issue.
 
 - **Master workflow**: When the exploration pipeline generates results, hammered on well, and we want to include them in the paper, we include them into the reproducible master workflow under the project folder. This master workflow is the final deliverable for reproducing the results.
-
 
 ## Installation
 
