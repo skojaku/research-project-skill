@@ -1,18 +1,17 @@
 ---
 name: research-project
 description: >-
-  Manage a computational research project across its whole lifecycle in this repo
-  — starting a fresh project, exploring new ideas, and promoting validated results
-  into the reproducible master workflow. Use this whenever the user starts a new
-  project, kicks off a new experiment / study / investigation ("let's test
-  whether...", "new idea to look at...", "spin up a study on..."), records what an
-  experiment found, or wants results moved into the paper's master workflow. It
-  owns the project template, each experiment's dated folder under exps/, its
-  NOTE.md lab notes, its GitHub tracking issue, and the master workflow. Trigger
-  it even if the user doesn't say "experiment" but is clearly starting or
-  advancing a piece of research. Do NOT trigger for narrow edits inside an
-  already-scaffolded experiment — a Snakemake rule, a NOTE.md typo, a script
-  tweak, a conda env, paper text, or a gh lookup.
+  Manage a computational research project across its whole lifecycle — starting a
+  fresh project, exploring new ideas, and promoting validated results into the
+  reproducible master workflow. Use whenever the user starts a new project, kicks
+  off a new experiment / study / investigation ("let's test whether...", "new idea
+  to look at...", "spin up a study on..."), records what an experiment found, or
+  wants results moved into the paper's master workflow — even if they don't say
+  "experiment" but are clearly starting or advancing research. It owns the project
+  template, each experiment's dated folder under exps/, its NOTE.md, its GitHub
+  issue, and the master workflow. Do NOT trigger for narrow edits inside an
+  already-scaffolded experiment — a Snakemake rule, NOTE.md typo, script tweak,
+  conda env, paper text, or gh lookup.
 ---
 
 # Research project lifecycle
