@@ -65,9 +65,12 @@ kebab-case handle for the question (e.g. `chunk-tda`). Inside the workspace:
   before writing any rules so the pipeline matches house conventions.
 - **NOTE.md** is the lab notebook — write it as you go. It is the front page of
   the experiment: a reader should understand the question and what you found
-  without opening any code. Title line + one-line takeaway, then the question
-  stated plainly (what would confirm it, what would refute it), then method and
-  findings as they take shape.
+  without opening any code. Start it from `assets/NOTE.template.md`. The template
+  is a running log: a title with the one-line takeaway, then one dated entry per
+  experiment within this exploration, newest at the bottom, separated by `---`.
+  Each entry records what you tried, the findings, the learning, and any gotcha.
+  One exploration folder holds many such entries as the idea develops — append a
+  new dated block each time you run something, don't overwrite the last.
 - **GitHub issue** tracks the experiment and is where you report findings and
   learnings. Open one at kickoff (title = the experiment, body = the question +
   folder path) and keep it updated as the work teaches you things. Label it
