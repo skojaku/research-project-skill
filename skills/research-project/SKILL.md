@@ -105,6 +105,27 @@ Two rules carry most of the weight, so make them explicit:
   one aggregation rule per stage). Load it before writing rules rather than
   reinventing those conventions here.
 
+## Code preferences
+
+- **Python** is the default language.
+- **Environments:** `uv` for Python dependencies, `mamba` for environments and
+  system-level packages (conda-forge). Reach for `mamba` when something needs a
+  non-Python toolchain, `uv` for everything pip-shaped.
+- **Keep scripts short — under ~200 lines where you can.** A script that outgrows
+  that is usually doing too much; split it or lift the shared logic out. Short
+  scripts read top-to-bottom in one sitting, which is the whole point.
+- **`libs/` holds reusable code.** Anything imported across more than one
+  experiment or script — shared loaders, metrics, model wrappers — lives in a
+  project-root `libs/` and is imported, not copy-pasted. Pipeline-step scripts
+  stay in their experiment's `workflow/`; only the genuinely reusable parts
+  graduate to `libs/`.
+- **Secrets in `.env`.** API keys and tokens go in a gitignored `.env`, never
+  hardcoded in scripts. Load them from the environment.
+- **Record the machine in `.env` too.** Keep the CPU, GPU, and memory of the box
+  the work ran on in `.env` for reference, so a result can be read against the
+  hardware that produced it (timings and batch sizes only make sense with the
+  spec in hand).
+
 ## Master workflow
 
 When an exploration's pipeline has produced results, been hammered on until they
