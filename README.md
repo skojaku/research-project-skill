@@ -18,11 +18,21 @@ The skill has the following rules for different lifestage of a research project.
 
 - **Fresh start**: When fresh start a project, [Downloads my project template](https://github.com/skojaku/project-template/) to get started.
 
-- **Exploration**: When exploring a new idea, create a folder under `exps/<yyyy-mm-dd>-<experiment name>` as a workspace. In the workspace,
-  - [Snakemake](https://github.com/snakemake/snakemake) will be used to organize the reproducible pipeline.
-  - It takes Lab note as it goes in NOTE.md. It also reports the findings and learning in Github Issue.
+- **Exploration**: When exploring a new idea, create a folder under `exps/<yyyy-mm-dd>-<experiment name>` as a workspace. Each exploration folder is self-contained — its own pipeline, data, and notes — so it can be reproduced, deleted, or revived without disturbing the rest. In the workspace,
+  - [Snakemake](https://github.com/snakemake/snakemake) will be used to organize the reproducible pipeline (see my [Snakemake skill](https://github.com/skojaku/snakemake-skill) for the conventions). Code lives under `workflow/`; everything the pipeline produces lives under `data/` and is never committed — it regenerates.
+  - It takes Lab note as it goes in NOTE.md. The note is a running log of dated entries separated by `---`, one per experiment in the exploration, each recording what I **Tried**, the **Findings**, the **Learning**, and any **Gotcha**. A template ships with the skill at `skills/research-project/assets/NOTE.template.md`.
+  - It also reports the findings and learning in Github Issue.
 
-- **Master workflow**: When the exploration pipeline generates results, hammered on well, and we want to include them in the paper, we include them into the reproducible master workflow under the project folder. This master workflow is the final deliverable for reproducing the results.
+- **Master workflow**: When the exploration pipeline generates results, hammered on well, and we want to include them in the paper, we include them into the reproducible master workflow under the project folder. It uses the same Snakemake layout but lives at the project root rather than under `exps/`. This master workflow is the final deliverable for reproducing the results.
+
+## Code preferences
+
+The skill also encodes a few coding habits:
+
+- **Python** by default. `uv` for pip-shaped dependencies, `mamba` for environments and system-level / non-Python toolchains.
+- **Short scripts** — under ~200 lines where possible. Past that, a script is doing too much; split it or lift the shared logic out.
+- **`libs/`** at the project root holds reusable code (loaders, metrics, model wrappers) imported across experiments. One-off pipeline steps stay in their experiment's `workflow/`.
+- **`.env`** (gitignored) holds API keys and tokens — never hardcoded — and the machine's CPU / GPU / memory for reference, so results can be read against the hardware that produced them.
 
 ## Installation
 
